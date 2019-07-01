@@ -1,0 +1,3 @@
+development:
+  exercise_service: http://localhost:3000
+  submission_service: http://localhost:3001
