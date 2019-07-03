@@ -40,11 +40,13 @@ class ExecuteExerciseJob
   def self.send_results(exercise_id, submission_id, token)
     result_paths = Dir["#{execution_directory 'build', 'test-results', 'test'}/*.xml"]
     results = parse_results result_paths
+    results.each do |result|
+      result['exercise_id'] = exercise_id
+      result['submission_id'] = submission_id
+    end
 
     payload = {
-        results: results,
-        exercise_id: exercise_id,
-        submission_id: submission_id
+        result: results
     }
     RestClient.post RESULT_URL, payload
   end
