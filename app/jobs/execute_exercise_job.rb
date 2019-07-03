@@ -1,7 +1,11 @@
 require 'open3'
+require 'rest-client'
+require 'nokogiri'
 
 class ExecuteExerciseJob
   include Utils
+
+  RESULT_URL = "#{Rails.configuration.service_urls.results_service}/results"
 
   SUBMISSION_FILENAME = 'submission.jar'.freeze
   TEST_FILENAME = 'test.jar'.freeze
@@ -28,6 +32,47 @@ class ExecuteExerciseJob
       raise "There was an error Executing job for exercise_id: #{exercise_id}, submission_id: #{submission_id}"
     end
 
+    send_results(exercise_id, submission_id, token)
+  end
 
+  private
+
+  def self.send_results(exercise_id, submission_id, token)
+    result_paths = Dir["#{execution_directory 'build', 'test-results', 'test'}/*.xml"]
+    results = parse_results result_paths
+
+    payload = {
+        results: results,
+        exercise_id: exercise_id,
+        submission_id: submission_id
+    }
+    RestClient.post RESULT_URL, payload
+  end
+
+  def self.parse_results(result_paths)
+    results = []
+
+    result_paths.each do |result_path|
+      result_document = Nokogiri.XML open(result_path)
+      result_document.css('testcase').each do |testcase_node|
+        result = testcase_node.attributes
+        result = result.transform_values(&:value)
+  
+        if testcase_node.elements.empty?
+          result['status'] = :success
+        else
+          failure_node = testcase_node.first_element_child
+          #TODO distinguish more cases
+          result['status'] = :failure
+          result['failure_message'] = failure_node['message']
+          result['failure_type'] = failure_node['type']
+          result['failure_details'] = failure_node.text
+        end
+  
+        results << result
+      end
+    end
+
+    results
   end
 end

@@ -42,4 +42,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'resque'
 gem 'rubyzip'
-gem "down"
+
+# Communication with services from the worker
+gem 'down'
+gem 'nokogiri'
+gem 'rest-client'
