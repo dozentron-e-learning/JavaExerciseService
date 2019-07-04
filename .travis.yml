@@ -1,0 +1,7 @@
+language: ruby
+jobs:
+  include:
+    - stage: test
+      script: bundle exec rake spec
+    #- stage: deploy
+    #  script: ./deploy
