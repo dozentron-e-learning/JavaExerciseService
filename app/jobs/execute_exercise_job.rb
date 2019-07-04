@@ -23,7 +23,7 @@ class ExecuteExerciseJob
     unzip_file execution_directory(TEST_FILENAME), execution_directory('src', 'test', 'java')
     unzip_file execution_directory(HIDDEN_TEST_FILENAME), execution_directory('src', 'test', 'java')
 
-    input, output, error, pid = ::Open3.popen3('gradle test', chdir: execution_directory)
+    input, output, error, pid = ::Open3.popen3('./gradlew test', chdir: execution_directory)
     exit_status = pid.value
 
     unless exit_status.success?
