@@ -13,7 +13,7 @@ class ExecuteExerciseJob
 
   def self.perform(exercise_id, submission_id, token)
     prepare exercise_id, submission_id, token
-    _, output, error, pid = ::Open3.popen3('./gradlew test', chdir: execution_directory)
+    _, output, error, pid = run_gradle_task 'test'
     exit_status = pid.value
 
     unless exit_status.success?

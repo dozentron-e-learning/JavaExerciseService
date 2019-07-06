@@ -1,4 +1,5 @@
 require 'zip'
+require 'open3'
 
 module Utils
   def self.included(base)
@@ -26,6 +27,10 @@ module Utils
     def download_submission(token, id, file_name)
       tempfile = Down.download("#{Rails.configuration.service_urls.submission_service}/api/v1/submission/#{id}/download")
       FileUtils.mv tempfile.path, execution_directory(file_name)
+    end
+
+    def run_gradle_task(*args)
+      ::Open3.popen3('./gradlew', *args, chdir: execution_directory)
     end
 
     def execution_directory(*path_elements)
