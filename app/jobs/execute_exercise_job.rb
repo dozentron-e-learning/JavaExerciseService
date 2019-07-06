@@ -31,7 +31,7 @@ class ExecuteExerciseJob
     prepare_execution_environment
 
     download_submission(token, submission_id, SUBMISSION_FILENAME)
-    unzip_file execution_directory(SUBMISSION_FILENAME), execution_directory('src', 'main', 'java')
+    unzip_file execution_directory(SUBMISSION_FILENAME), execution_directory('src', 'test', 'java')
 
     download_exercise(token, exercise_id, TEST_FILENAME)
     download_exercise_hidden(token, exercise_id, HIDDEN_TEST_FILENAME)
