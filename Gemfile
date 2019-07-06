@@ -47,3 +47,10 @@ gem 'rubyzip'
 gem 'down'
 gem 'nokogiri'
 gem 'rest-client'
+
+# Test and Submission Validation
+gem 'mimemagic'
+
+# internationalization
+gem 'i18n'
+gem 'rails-i18n'

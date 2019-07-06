@@ -1,33 +1,7 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t 'hello'
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t('hello') %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   'true': 'foo'
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  validation:
+    not_a_jar: "File needs to be a jar-archive."
+    needs_source_files: "File needs to contain the Java Source code."
+    needs_class_files: "File needs to contain the Class-Files."
+    test_compiles_without_submission: "Test compiles without a submission. The test archive probably contains the class that should be tested. Please remove the class that should be tested otherwise it will hide the code of the students."
+    test_doesnt_compile: "Test doesn't compile. See compile output for details."

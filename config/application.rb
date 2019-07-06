@@ -36,5 +36,7 @@ module JavaExerciseService
 
     config.active_job.queue_adapter = :resque
     config.service_urls = config_for 'service_urls'
+
+    config.i18n.fallbacks = [:en]
   end
 end

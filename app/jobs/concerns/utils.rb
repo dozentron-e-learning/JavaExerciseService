@@ -37,9 +37,37 @@ module Utils
       Rails.root.join EXECUTION_DIRECTORY, *path_elements
     end
 
+    ##
+    # Prepares an execution directory by copying the +EXECUTION_DIRECTORY_TEMPLATE+ directory to +execution_directory+
     def prepare_execution_environment
       FileUtils.rm_rf execution_directory
-      FileUtils.copy_entry Rails.root.join(EXECUTION_DIRECTORY_TEMPLATE), execution_directory, false, false, true
+      FileUtils.copy_entry Rails.root.join(EXECUTION_DIRECTORY_TEMPLATE), execution_directory
+    end
+
+    def can_be_opened_as_zip?(path)
+      begin
+        Zip::File.open(path) {}
+      rescue
+        return false
+      end
+
+      true
+    end
+
+    def contains_java_files?(path)
+      Dir["#{path}/**/*.java"].any?
+    end
+
+    def contains_class_files?(path)
+      Dir["#{path}/**/*.class"].any?
+    end
+
+    def validate_jar(path, dir_path)
+      return I18n.t :'validation.not_a_jar' unless can_be_opened_as_zip? path
+
+      unzip_file path, dir_path
+      return I18n.t :'validation.needs_source_files' unless contains_java_files? dir_path
+      return I18n.t :'validation.needs_class_files' unless contains_class_files? dir_path
     end
 
     def unzip_file(file, destination = execution_directory)
