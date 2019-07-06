@@ -30,6 +30,10 @@ RSpec.describe ExecuteExerciseJob, type: :job do
 
       expect(WebMock).to have_requested(:post, result_url)
         #.with(body: hash_including(exercise_id: exercise_id, submission_id: submission_id))
+
+      submission_response.close
+      test_response.close
+      hidden_test_response.close
     end
 
     it 'it can handle test failures and uploaded Junit tests' do
@@ -60,6 +64,10 @@ RSpec.describe ExecuteExerciseJob, type: :job do
 
       expect(WebMock).to have_requested(:post, result_url)
       #.with(body: hash_including(exercise_id: exercise_id, submission_id: submission_id))
+
+      submission_response.close
+      test_response.close
+      hidden_test_response.close
     end
   end
 end
