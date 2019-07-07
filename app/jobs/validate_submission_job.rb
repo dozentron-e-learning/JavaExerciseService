@@ -8,7 +8,7 @@ class ValidateSubmissionJob
   TEST_FILENAME = 'test.jar'.freeze
   HIDDEN_TEST_FILENAME = 'hidden_test.jar'.freeze
 
-  SUBMISSION_UPDATE_URL = "#{Rails.configuration.service_urls.submission_service}/api/v1/exercises"
+  SUBMISSION_UPDATE_URL = "#{Rails.configuration.service_urls.submission_service}/submission"
 
   def self.perform(exercise_id, submission_id, token)
     prepare_execution_environment
@@ -34,7 +34,7 @@ class ValidateSubmissionJob
     _, output, error, pid = run_gradle_task 'compileTestJava'
     exit_status = pid.value
 
-    if exit_status.failed?
+    unless exit_status.success?
       general_validation_error = I18n.t 'validation.submission_doesnt_compile'
       general_validation_error_details = output.read + "\n" + error.read
     end

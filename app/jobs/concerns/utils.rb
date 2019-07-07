@@ -25,7 +25,7 @@ module Utils
     end
 
     def download_submission(token, id, file_name)
-      tempfile = Down.download("#{Rails.configuration.service_urls.submission_service}/api/v1/submission/#{id}/download")
+      tempfile = Down.download("#{Rails.configuration.service_urls.submission_service}/submission/#{id}/download")
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 

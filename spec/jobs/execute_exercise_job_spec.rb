@@ -6,7 +6,7 @@ RSpec.describe ExecuteExerciseJob, type: :job do
       exercise_id = 1
       submission_id = 2
 
-      submission_download_url = "http://localhost:3001/api/v1/submission/#{submission_id}/download"
+      submission_download_url = "http://localhost:3001/submission/#{submission_id}/download"
       exercise_test_download_url = "http://localhost:3000/api/v1/exercise/#{exercise_id}/download"
       exercise_hidden_test_download_url = "http://localhost:3000/api/v1/exercise/#{exercise_id}/download_hidden"
 
@@ -40,7 +40,7 @@ RSpec.describe ExecuteExerciseJob, type: :job do
       exercise_id = 1
       submission_id = 2
 
-      submission_download_url = "http://localhost:3001/api/v1/submission/#{submission_id}/download"
+      submission_download_url = "http://localhost:3001/submission/#{submission_id}/download"
       exercise_test_download_url = "http://localhost:3000/api/v1/exercise/#{exercise_id}/download"
       exercise_hidden_test_download_url = "http://localhost:3000/api/v1/exercise/#{exercise_id}/download_hidden"
 
