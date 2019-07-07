@@ -5,3 +5,4 @@ en:
     needs_class_files: "File needs to contain the Class-Files."
     test_compiles_without_submission: "Test compiles without a submission. The test archive probably contains the class that should be tested. Please remove the class that should be tested otherwise it will hide the code of the students."
     test_doesnt_compile: "Test doesn't compile. See compile output for details."
+    submission_doesnt_compile: "Submission doesn't compile. See compile output for details."
