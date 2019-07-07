@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ValidateExerciseJob, type: :job do
+  before(:each) do
+    # Clear Execution Environment before each test
+    TestHelper.prepare_execution_environment
+  end
+
   describe 'perform' do
     it 'it runs in general and produces no validation errors with valid tests.' do
       exercise_id = 1
@@ -40,6 +45,23 @@ RSpec.describe ValidateExerciseJob, type: :job do
       stub_response.close
       test_response.close
       hidden_test_response.close
+    end
+  end
+
+  describe 'validate_exercise' do
+    it 'it recognizes compilation problems' do
+      test_path = Rails.root.join 'spec', 'resources', 'jars', 'test.jar'
+
+      result = ValidateExerciseJob.validate_exercise test_path, test_path, test_path
+
+      expect(result[:api_v1_exercise]).to include(
+          :general_validation_error_details,
+          validation_status: :failed,
+          test_validation_error: nil,
+          hidden_test_validation_error: nil,
+          stub_validation_error: nil,
+          general_validation_error: I18n.t('validation.test_doesnt_compile')
+      )
     end
   end
 end
