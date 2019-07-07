@@ -38,7 +38,7 @@ class ValidateExerciseJob
       general_validation_error = I18n.t 'validation.test_compiles_without_submission'
       general_validation_error_details = output.read + "\n" + error.read
     else
-      unzip_file execution_directory(STUB_FILENAME), execution_directory('src', 'test', 'java')
+      unzip_file stub_path, execution_directory('src', 'test', 'java')
       _, output, error, pid = run_gradle_task 'compileTestJava'
       exit_status = pid.value
 
