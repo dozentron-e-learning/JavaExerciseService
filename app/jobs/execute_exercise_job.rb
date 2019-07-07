@@ -22,7 +22,9 @@ class ExecuteExerciseJob
       raise "There was an error Executing job for exercise_id: #{exercise_id}, submission_id: #{submission_id}"
     end
 
-    send_results(exercise_id, submission_id, token)
+    result_paths = Dir["#{execution_directory 'build', 'test-results', 'test'}/*.xml"]
+    payload = collect_results(exercise_id, submission_id, result_paths)
+    RestClient.post RESULT_URL, payload
   end
 
   private
@@ -31,27 +33,25 @@ class ExecuteExerciseJob
     prepare_execution_environment
 
     download_submission(token, submission_id, SUBMISSION_FILENAME)
-    unzip_file execution_directory(SUBMISSION_FILENAME), execution_directory('src', 'test', 'java')
-
     download_exercise(token, exercise_id, TEST_FILENAME)
     download_exercise_hidden(token, exercise_id, HIDDEN_TEST_FILENAME)
 
+    # It is important to unzip submission first. This way we make sure that the submission doesn't overwrite any given tests.
+    unzip_file execution_directory(SUBMISSION_FILENAME), execution_directory('src', 'test', 'java')
     unzip_file execution_directory(TEST_FILENAME), execution_directory('src', 'test', 'java')
     unzip_file execution_directory(HIDDEN_TEST_FILENAME), execution_directory('src', 'test', 'java')
   end
 
-  def self.send_results(exercise_id, submission_id, token)
-    result_paths = Dir["#{execution_directory 'build', 'test-results', 'test'}/*.xml"]
+  def self.collect_results(exercise_id, submission_id, result_paths)
     results = parse_results result_paths
     results.each do |result|
       result['exercise_id'] = exercise_id
       result['submission_id'] = submission_id
     end
 
-    payload = {
+    {
         result: results
     }
-    RestClient.post RESULT_URL, payload
   end
 
   def self.parse_results(result_paths)

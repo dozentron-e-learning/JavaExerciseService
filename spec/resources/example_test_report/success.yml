@@ -1,0 +1,32 @@
+---
+:result:
+- name: addsTwoNumbers()
+  classname: com.example.project.CalculatorTests
+  time: '0.018'
+  status: :success
+  exercise_id: 1
+  submission_id: 2
+- name: add(int, int, int)[1]
+  classname: com.example.project.CalculatorTests
+  time: '0.017'
+  status: :success
+  exercise_id: 1
+  submission_id: 2
+- name: add(int, int, int)[2]
+  classname: com.example.project.CalculatorTests
+  time: '0.001'
+  status: :success
+  exercise_id: 1
+  submission_id: 2
+- name: add(int, int, int)[3]
+  classname: com.example.project.CalculatorTests
+  time: '0.001'
+  status: :success
+  exercise_id: 1
+  submission_id: 2
+- name: add(int, int, int)[4]
+  classname: com.example.project.CalculatorTests
+  time: '0.001'
+  status: :success
+  exercise_id: 1
+  submission_id: 2

@@ -29,7 +29,7 @@ RSpec.describe ExecuteExerciseJob, type: :job do
       expect(WebMock).to have_requested(:get, exercise_hidden_test_download_url).once
 
       expect(WebMock).to have_requested(:post, result_url)
-        #.with(body: hash_including(exercise_id: exercise_id, submission_id: submission_id))
+      #.with(body: hash_including(exercise_id: exercise_id, submission_id: submission_id))
 
       submission_response.close
       test_response.close
@@ -68,6 +68,29 @@ RSpec.describe ExecuteExerciseJob, type: :job do
       submission_response.close
       test_response.close
       hidden_test_response.close
+    end
+  end
+  describe 'collect_results' do
+    it 'collects successfull reports' do
+      exercise_id = 1
+      submission_id = 2
+      result_paths = [Rails.root.join('spec', 'resources', 'example_test_report', 'failed_report.xml').to_s]
+      expected = YAML.load_file Rails.root.join('spec', 'resources', 'example_test_report', 'failed.yml')
+
+      actual_result = ExecuteExerciseJob.collect_results exercise_id, submission_id, result_paths
+
+      expect(actual_result).to eql(expected)
+    end
+
+    it 'collects failed reports' do
+      exercise_id = 1
+      submission_id = 2
+      result_paths = [Rails.root.join('spec', 'resources', 'example_test_report', 'report.xml').to_s]
+      expected = YAML.load_file Rails.root.join('spec', 'resources', 'example_test_report', 'success.yml')
+
+      actual_result = ExecuteExerciseJob.collect_results exercise_id, submission_id, result_paths
+
+      expect(actual_result).to eql(expected)
     end
   end
 end
