@@ -12,7 +12,32 @@ class ExecuteExerciseJob
   HIDDEN_TEST_FILENAME = 'hidden_test.jar'.freeze
 
   def self.perform(exercise_id, submission_id, token)
-    prepare exercise_id, submission_id, token
+    prepare_execution_environment
+    download exercise_id, submission_id, token
+
+    test_path = execution_directory TEST_FILENAME
+    hidden_test_path = execution_directory HIDDEN_TEST_FILENAME
+    submission_path = execution_directory SUBMISSION_FILENAME
+
+    payload = execute_test test_path, hidden_test_path, submission_path
+
+    # Add exercise_id and submission_id to every result
+    payload[:results].each do |result|
+      result['exercise_id'] = exercise_id
+      result['submission_id'] = submission_id
+    end
+
+    RestClient.post RESULT_URL, payload
+  end
+
+  private
+
+  def self.execute_test(test_jar_path, hidden_test_jar_path, submission_jar_path)
+    # It is important to unzip submission first. This way we make sure that the submission doesn't overwrite any given tests.
+    unzip_file submission_jar_path, execution_directory('src', 'test', 'java')
+    unzip_file test_jar_path, execution_directory('src', 'test', 'java')
+    unzip_file hidden_test_jar_path, execution_directory('src', 'test', 'java')
+
     _, output, error, pid = run_gradle_task 'test'
     exit_status = pid.value
 
@@ -23,35 +48,13 @@ class ExecuteExerciseJob
     end
 
     result_paths = Dir["#{execution_directory 'build', 'test-results', 'test'}/*.xml"]
-    payload = collect_results(exercise_id, submission_id, result_paths)
-    RestClient.post RESULT_URL, payload
+    parse_results(result_paths)
   end
 
-  private
-
-  def self.prepare(exercise_id, submission_id, token)
-    prepare_execution_environment
-
+  def self.download(exercise_id, submission_id, token)
     download_submission(token, submission_id, SUBMISSION_FILENAME)
     download_exercise(token, exercise_id, TEST_FILENAME)
     download_exercise_hidden(token, exercise_id, HIDDEN_TEST_FILENAME)
-
-    # It is important to unzip submission first. This way we make sure that the submission doesn't overwrite any given tests.
-    unzip_file execution_directory(SUBMISSION_FILENAME), execution_directory('src', 'test', 'java')
-    unzip_file execution_directory(TEST_FILENAME), execution_directory('src', 'test', 'java')
-    unzip_file execution_directory(HIDDEN_TEST_FILENAME), execution_directory('src', 'test', 'java')
-  end
-
-  def self.collect_results(exercise_id, submission_id, result_paths)
-    results = parse_results result_paths
-    results.each do |result|
-      result['exercise_id'] = exercise_id
-      result['submission_id'] = submission_id
-    end
-
-    {
-        result: results
-    }
   end
 
   def self.parse_results(result_paths)
@@ -78,6 +81,8 @@ class ExecuteExerciseJob
       end
     end
 
-    results
+    {
+        result: results
+    }
   end
 end

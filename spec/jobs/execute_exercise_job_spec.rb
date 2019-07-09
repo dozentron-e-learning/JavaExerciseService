@@ -72,23 +72,19 @@ RSpec.describe ExecuteExerciseJob, type: :job do
   end
   describe 'collect_results' do
     it 'collects successfull reports' do
-      exercise_id = 1
-      submission_id = 2
       result_paths = [Rails.root.join('spec', 'resources', 'example_test_report', 'failed_report.xml').to_s]
       expected = YAML.load_file Rails.root.join('spec', 'resources', 'example_test_report', 'failed.yml')
 
-      actual_result = ExecuteExerciseJob.collect_results exercise_id, submission_id, result_paths
+      actual_result = ExecuteExerciseJob.parse_results result_paths
 
       expect(actual_result).to eql(expected)
     end
 
     it 'collects failed reports' do
-      exercise_id = 1
-      submission_id = 2
       result_paths = [Rails.root.join('spec', 'resources', 'example_test_report', 'report.xml').to_s]
       expected = YAML.load_file Rails.root.join('spec', 'resources', 'example_test_report', 'success.yml')
 
-      actual_result = ExecuteExerciseJob.collect_results exercise_id, submission_id, result_paths
+      actual_result = ExecuteExerciseJob.parse_results result_paths
 
       expect(actual_result).to eql(expected)
     end
