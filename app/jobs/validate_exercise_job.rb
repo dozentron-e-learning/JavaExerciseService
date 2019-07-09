@@ -1,7 +1,7 @@
 class ValidateExerciseJob
   include Utils
 
-  VALIDATION_SUCCEEDED = :succeeded
+  VALIDATION_SUCCEEDED = :success
   VALIDATION_FAILED = :failed
 
   TEST_FILENAME = 'test.jar'.freeze

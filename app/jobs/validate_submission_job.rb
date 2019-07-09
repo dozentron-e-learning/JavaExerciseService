@@ -1,7 +1,7 @@
 class ValidateSubmissionJob
   include Utils
 
-  VALIDATION_SUCCEEDED = :succeeded
+  VALIDATION_SUCCEEDED = :success
   VALIDATION_FAILED = :failed
 
   SUBMISSION_FILENAME = 'submission.jar'.freeze
