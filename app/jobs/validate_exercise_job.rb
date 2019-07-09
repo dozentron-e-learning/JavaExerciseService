@@ -8,7 +8,7 @@ class ValidateExerciseJob
   HIDDEN_TEST_FILENAME = 'hidden_test.jar'.freeze
   STUB_FILENAME = 'stub.jar'.freeze
 
-  EXERCISE_UPDATE_URL = "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises"
+  EXERCISE_UPDATE_URL = "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercise"
 
   def self.perform(exercise_id, token)
     prepare_execution_environment
