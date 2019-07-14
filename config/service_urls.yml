@@ -1,9 +1,9 @@
 development:
   exercise_service: http://localhost:3000
   submission_service: http://localhost:3001
-  results_service: http://localhost:3002
+  result_service: http://localhost:3002
 
 test:
   exercise_service: http://localhost:3000
   submission_service: http://localhost:3001
-  results_service: http://localhost:3002
+  result_service: http://localhost:3002

@@ -5,7 +5,7 @@ require 'nokogiri'
 class ExecuteExerciseJob
   include Utils
 
-  RESULT_URL = "#{Rails.configuration.service_urls.results_service}/results"
+  RESULT_URL = "#{Rails.configuration.service_urls.result_service}/results".freeze
 
   SUBMISSION_FILENAME = 'submission.jar'.freeze
   TEST_FILENAME = 'test.jar'.freeze
@@ -19,10 +19,10 @@ class ExecuteExerciseJob
     hidden_test_path = execution_directory HIDDEN_TEST_FILENAME
     submission_path = execution_directory SUBMISSION_FILENAME
 
-    payload = execute_test test_path, hidden_test_path, submission_path
+    payload = execute_exercise test_path, hidden_test_path, submission_path
 
     # Add exercise_id and submission_id to every result
-    payload[:results].each do |result|
+    payload[:result].each do |result|
       result['exercise_id'] = exercise_id
       result['submission_id'] = submission_id
     end
@@ -32,7 +32,7 @@ class ExecuteExerciseJob
 
   private
 
-  def self.execute_test(test_jar_path, hidden_test_jar_path, submission_jar_path)
+  def self.execute_exercise(test_jar_path, hidden_test_jar_path, submission_jar_path)
     # It is important to unzip submission first. This way we make sure that the submission doesn't overwrite any given tests.
     unzip_file submission_jar_path, execution_directory('src', 'test', 'java')
     unzip_file test_jar_path, execution_directory('src', 'test', 'java')
