@@ -26,7 +26,7 @@ class ValidateSubmissionJob
     general_validation_error = nil
     general_validation_error_details = nil
 
-    submission_validation_error = validate_jar submission_path, execution_directory('stub')
+    submission_validation_error = validate_jar_content submission_path, execution_directory('stub')
 
     unzip_file submission_path, execution_directory('src', 'test', 'java')
     unzip_file test_path, execution_directory('src', 'test', 'java')

@@ -6,3 +6,5 @@ en:
     test_compiles_without_submission: "Test compiles without a submission. The test archive probably contains the class that should be tested. Please remove the class that should be tested otherwise it will hide the code of the students."
     test_doesnt_compile: "Test doesn't compile. See compile output for details."
     submission_doesnt_compile: "Submission doesn't compile. See compile output for details."
+    test_doesnt_contain_any_tests: "Can't find any test cases in test files."
+    test_doesnt_contain_any_test_disclaimer: "Please note, that Dozentron currently only supports tests with the @Test annotation."

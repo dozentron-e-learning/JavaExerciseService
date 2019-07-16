@@ -1,3 +1,25 @@
+import org.junit.platform.launcher.TestIdentifier
+import org.junit.platform.launcher.TestPlan
+import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder
+import org.junit.platform.launcher.core.LauncherFactory
+
+import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClasspathRoots
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
+        classpath 'org.junit.platform:junit-platform-launcher:1.5.0'
+
+        classpath files("$buildDir/classes/java/test") {
+            builtBy 'compileTestJava'
+        }
+    }
+}
+
 plugins {
     // Apply the java plugin to add support for Java
     id 'java'
@@ -28,4 +50,41 @@ test {
 	afterTest { test, result ->
 		logger.quiet "Completed Testcase: " + test.getName() + " with result: " + result
 	}
+}
+
+class FindTestCasesTask extends DefaultTask {
+    @TaskAction
+    void findTestCases() {
+        def request = LauncherDiscoveryRequestBuilder.request()
+                .selectors(
+                        selectClasspathRoots(Set.of(java.nio.file.Path.of("$project.buildDir/classes/java/test")))
+                )
+                .build()
+
+        def launcher = LauncherFactory.create()
+        def testPlan = launcher.discover(request)
+
+        for (TestIdentifier root : testPlan.getRoots()) {
+            printTestIdentifier(root, testPlan)
+        }
+
+    }
+
+    private static void printTestIdentifier(TestIdentifier identifier, TestPlan plan) {
+        if(identifier.isTest()) {
+            print(plan.getParent(identifier).get().getLegacyReportingName())
+            print "|"
+            println(identifier.getLegacyReportingName())
+        }
+
+        for (TestIdentifier child : plan.getChildren(identifier)) {
+            printTestIdentifier(child, plan)
+        }
+    }
+}
+
+tasks.register("findTestCases", FindTestCasesTask) {
+    group = 'Dozentron'
+    description = 'Produces a list of available TestCases in this project.'
+    dependsOn compileTestJava
 }

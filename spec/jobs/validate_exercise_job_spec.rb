@@ -47,12 +47,13 @@ RSpec.describe ValidateExerciseJob, type: :job do
       describe "can't compile" do
         let(:result) { ValidateExerciseJob.validate_exercise test_jar_path, test_jar_path, test_jar_path }
 
-        it('should have result grouped as submission')  { expect(result).to include(:api_v1_exercise)}
-        it('should have a failed status')               { expect(result[:api_v1_exercise]).to include(validation_status: :failed)}
-        it('should have general_validation_error')      { expect(result[:api_v1_exercise]).to include(:general_validation_error_details)}
-        it('should have empty test validation')         { expect(result[:api_v1_exercise]).to include(test_validation_error: nil)}
-        it('should have empty hidden test validation')  { expect(result[:api_v1_exercise]).to include(hidden_test_validation_error: nil)}
-        it('should have empty stub validation')         { expect(result[:api_v1_exercise]).to include(stub_validation_error: nil)}
+        it('should have result grouped as submission') { expect(result).to include(:api_v1_exercise)}
+        it('should have empty tests')                  { expect(result[:api_v1_exercise]).to include(tests: {})}
+        it('should have a failed status')              { expect(result[:api_v1_exercise]).to include(validation_status: :failed)}
+        it('should have general_validation_error')     { expect(result[:api_v1_exercise]).to include(:general_validation_error_details)}
+        it('should have empty test validation')        { expect(result[:api_v1_exercise]).to include(test_validation_error: nil)}
+        it('should have empty hidden test validation') { expect(result[:api_v1_exercise]).to include(hidden_test_validation_error: nil)}
+        it('should have empty stub validation')        { expect(result[:api_v1_exercise]).to include(stub_validation_error: nil)}
         it("should have general_validation_error with a doesn't compile message") do
           expect(result[:api_v1_exercise]).to include(general_validation_error: I18n.t('validation.test_doesnt_compile'))
         end
@@ -63,12 +64,13 @@ RSpec.describe ValidateExerciseJob, type: :job do
   context 'without problems' do
     let(:result) { ValidateExerciseJob.validate_exercise test_jar_path, hidden_test_jar_path, stub_jar_path }
 
-    it('should have result grouped as submission')      { expect(result).to include(:api_v1_exercise)}
-    it('should have a success status')                  { expect(result[:api_v1_exercise]).to include(validation_status: :success)}
-    it('should have empty general_validation_error')    { expect(result[:api_v1_exercise]).to include(general_validation_error_details: nil)}
-    it('should have empty test validation')             { expect(result[:api_v1_exercise]).to include(test_validation_error: nil)}
-    it('should have empty hidden test validation')      { expect(result[:api_v1_exercise]).to include(hidden_test_validation_error: nil)}
-    it('should have empty stub validation')             { expect(result[:api_v1_exercise]).to include(stub_validation_error: nil)}
-    it('should have empty general_validation_error')    { expect(result[:api_v1_exercise]).to include(general_validation_error: nil) }
+    it('should have result grouped as submission')   { expect(result).to include(:api_v1_exercise)}
+    it('should have tests')                          { expect(result[:api_v1_exercise]).to include(tests: {"com.example.project.CalculatorTests" => ["addsTwoNumbers()"]})}
+    it('should have a success status')               { expect(result[:api_v1_exercise]).to include(validation_status: :success)}
+    it('should have empty general_validation_error') { expect(result[:api_v1_exercise]).to include(general_validation_error_details: nil)}
+    it('should have empty test validation')          { expect(result[:api_v1_exercise]).to include(test_validation_error: nil)}
+    it('should have empty hidden test validation')   { expect(result[:api_v1_exercise]).to include(hidden_test_validation_error: nil)}
+    it('should have empty stub validation')          { expect(result[:api_v1_exercise]).to include(stub_validation_error: nil)}
+    it('should have empty general_validation_error') { expect(result[:api_v1_exercise]).to include(general_validation_error: nil) }
   end
 end

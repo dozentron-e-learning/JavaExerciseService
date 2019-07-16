@@ -1,5 +1,6 @@
 require 'zip'
 require 'open3'
+require 'csv'
 
 module Utils
   def self.included(base)
@@ -29,8 +30,8 @@ module Utils
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
-    def run_gradle_task(*args)
-      ::Open3.popen3('./gradlew', *args, chdir: execution_directory)
+    def run_gradle_task(*args, work_dir: execution_directory)
+      ::Open3.popen3('./gradlew', *args, chdir: work_dir)
     end
 
     def execution_directory(*path_elements)
@@ -62,12 +63,28 @@ module Utils
       Dir["#{path}/**/*.class"].any?
     end
 
-    def validate_jar(path, dir_path)
+    def validate_jar_content(path, dir_path)
       return I18n.t :'validation.not_a_jar' unless can_be_opened_as_zip? path
 
       unzip_file path, dir_path
       return I18n.t :'validation.needs_source_files' unless contains_java_files? dir_path
       return I18n.t :'validation.needs_class_files' unless contains_class_files? dir_path
+    end
+
+    def compiles?(dir = execution_directory)
+      _, output, error, pid = run_gradle_task 'compileTestJava', work_dir: dir
+      exit_status = pid.value
+
+      [exit_status.success?, output, error]
+    end
+
+    ##
+    # dir needs to be prepared to run gradle
+    def find_test_cases(dir = execution_directory)
+      _, output, error, pid = run_gradle_task "findTestCases", "-q"
+      exit_status = pid.value
+
+      ::CSV.parse output.read, col_sep: '|' if exit_status.success?
     end
 
     def unzip_file(file, destination = execution_directory)
