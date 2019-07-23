@@ -1,0 +1,19 @@
+default: &default
+  host: localhost
+  port: 5672
+  username: guest
+  password: guest
+  auth_mechanism: plain
+  enabled: true
+
+development:
+  <<: *default
+  virtual_host: development
+
+test:
+  <<: *default
+  virtual_host: test
+
+production:
+  <<: *default
+  virtual_host: production

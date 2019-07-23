@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+git_source(:thm_git) { |repo| "https://git.thm.de/#{repo}.git" }
 
 ruby '2.6.3'
 
@@ -54,3 +55,6 @@ gem 'mimemagic'
 # internationalization
 gem 'i18n'
 gem 'rails-i18n'
+
+# Messaging
+gem 'activebunny', thm_git: 'ss2019-masterarbeit-gildamesh/activebunny'

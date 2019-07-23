@@ -3,6 +3,8 @@ require 'rest-client'
 require 'nokogiri'
 
 class ExecuteExerciseJob
+  @queue = :plugin_execute_java
+
   include Utils
 
   RESULT_URL = "#{Rails.configuration.service_urls.result_service}/results".freeze

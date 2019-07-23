@@ -1,6 +1,8 @@
 class ValidateExerciseJob
   include Utils
 
+  @queue = :plugin_java
+
   VALIDATION_SUCCEEDED = :success
   VALIDATION_FAILED = :failed
 
