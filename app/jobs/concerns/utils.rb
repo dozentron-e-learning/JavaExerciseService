@@ -11,22 +11,22 @@ module Utils
     EXECUTION_DIRECTORY = 'gradle_execution_environment'.freeze
 
     def download_exercise(token, id, file_name)
-      tempfile = Down.download("#{Rails.configuration.service_urls.exercise_service}/api/v1/exercise/#{id}/download")
+      tempfile = Down.download("#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{id}/download")
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
     def download_exercise_hidden(token, id, file_name)
-      tempfile = Down.download("#{Rails.configuration.service_urls.exercise_service}/api/v1/exercise/#{id}/download_hidden")
+      tempfile = Down.download("#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{id}/download_hidden")
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
     def download_exercise_stub(token, id, file_name)
-      tempfile = Down.download("#{Rails.configuration.service_urls.exercise_service}/api/v1/exercise/#{id}/download_stub")
+      tempfile = Down.download("#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{id}/download_stub")
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
     def download_submission(token, id, file_name)
-      tempfile = Down.download("#{Rails.configuration.service_urls.submission_service}/submission/#{id}/download")
+      tempfile = Down.download("#{Rails.configuration.service_urls.submission_service}/submissions/#{id}/download")
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 

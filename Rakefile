@@ -3,5 +3,6 @@
 
 require_relative 'config/application'
 require 'resque/tasks'
+load 'lib/tasks/resque_setup.rake'
 
-Rails.application.load_tasks
+Rails.application.load_tasks if defined? Rails

@@ -1,25 +1,25 @@
 require 'open3'
 require 'rest-client'
 require 'nokogiri'
+require_relative 'application_job'
 
-class ExecuteExerciseJob
-  @queue = :plugin_execute_java
+
+class ExecuteExerciseJob < ApplicationJob
+  @queue = :plugin_java_execute
 
   include Utils
 
   RESULT_URL = "#{Rails.configuration.service_urls.result_service}/results".freeze
 
-  SUBMISSION_FILENAME = 'submission.jar'.freeze
-  TEST_FILENAME = 'test.jar'.freeze
-  HIDDEN_TEST_FILENAME = 'hidden_test.jar'.freeze
-
   def self.perform(exercise_id, submission_id, token)
+    LOGGER.debug "Starting execution of exercise #{exercise_id} and submission #{submission_id}"
+
     prepare_execution_environment
     download exercise_id, submission_id, token
 
-    test_path = execution_directory TEST_FILENAME
-    hidden_test_path = execution_directory HIDDEN_TEST_FILENAME
-    submission_path = execution_directory SUBMISSION_FILENAME
+    test_path = execution_directory ApplicationJob::TEST_FILENAME
+    hidden_test_path = execution_directory ApplicationJob::HIDDEN_TEST_FILENAME
+    submission_path = execution_directory ApplicationJob::SUBMISSION_FILENAME
 
     payload = execute_exercise test_path, hidden_test_path, submission_path
 
@@ -29,7 +29,9 @@ class ExecuteExerciseJob
       result['submission_id'] = submission_id
     end
 
+    LOGGER.debug "finished execution sending payload"
     RestClient.post RESULT_URL, payload
+    LOGGER.debug "finished sending payload"
   end
 
   private
@@ -54,9 +56,9 @@ class ExecuteExerciseJob
   end
 
   def self.download(exercise_id, submission_id, token)
-    download_submission(token, submission_id, SUBMISSION_FILENAME)
-    download_exercise(token, exercise_id, TEST_FILENAME)
-    download_exercise_hidden(token, exercise_id, HIDDEN_TEST_FILENAME)
+    download_submission(token, submission_id, ApplicationJob::SUBMISSION_FILENAME)
+    download_exercise(token, exercise_id, ApplicationJob::TEST_FILENAME)
+    download_exercise_hidden(token, exercise_id, ApplicationJob::HIDDEN_TEST_FILENAME)
   end
 
   def self.parse_results(result_paths)

@@ -1,27 +1,31 @@
-class ValidateSubmissionJob
-  include Utils
+require_relative 'application_job'
 
-  @queue = :plugin_java
+class ValidateSubmissionJob < ApplicationJob
+  @queue = :plugin_java_validate
 
   VALIDATION_SUCCEEDED = :success
   VALIDATION_FAILED = :failed
 
-  SUBMISSION_FILENAME = 'submission.jar'.freeze
-  TEST_FILENAME = 'test.jar'.freeze
-  HIDDEN_TEST_FILENAME = 'hidden_test.jar'.freeze
-
-  SUBMISSION_UPDATE_URL = "#{Rails.configuration.service_urls.submission_service}/submission"
+  SUBMISSION_UPDATE_URL = "#{Rails.configuration.service_urls.submission_service}/submissions"
 
   def self.perform(exercise_id, submission_id, token)
+    LOGGER.debug "Starting validation of submission #{submission_id} with exercise #{exercise_id}"
+
     prepare_execution_environment
 
-    download_exercise(token, exercise_id, TEST_FILENAME)
-    download_exercise_hidden(token, exercise_id, HIDDEN_TEST_FILENAME)
+    download_exercise(token, exercise_id, ApplicationJob::TEST_FILENAME)
+    download_exercise_hidden(token, exercise_id, ApplicationJob::HIDDEN_TEST_FILENAME)
 
-    download_submission(token, submission_id, SUBMISSION_FILENAME)
+    download_submission(token, submission_id, ApplicationJob::SUBMISSION_FILENAME)
 
-    payload = validate_submission(execution_directory(TEST_FILENAME), execution_directory(HIDDEN_TEST_FILENAME), execution_directory(SUBMISSION_FILENAME))
+    payload = validate_submission(
+        execution_directory(ApplicationJob::TEST_FILENAME),
+        execution_directory(ApplicationJob::HIDDEN_TEST_FILENAME),
+        execution_directory(ApplicationJob::SUBMISSION_FILENAME))
+
+    LOGGER.debug "finished validating sending payload"
     RestClient.patch "#{SUBMISSION_UPDATE_URL}/#{submission_id}", payload
+    LOGGER.debug "finished sending payload"
   end
 
   def self.validate_submission(test_path, hidden_test_path, submission_path)

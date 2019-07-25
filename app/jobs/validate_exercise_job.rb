@@ -1,26 +1,31 @@
-class ValidateExerciseJob
-  include Utils
+require_relative 'application_job'
 
-  @queue = :plugin_java
+class ValidateExerciseJob < ApplicationJob
+  @queue = :plugin_java_validate
 
   VALIDATION_SUCCEEDED = :success
   VALIDATION_FAILED = :failed
 
-  TEST_FILENAME = 'test.jar'.freeze
-  HIDDEN_TEST_FILENAME = 'hidden_test.jar'.freeze
   STUB_FILENAME = 'stub.jar'.freeze
 
-  EXERCISE_UPDATE_URL = "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercise"
+  EXERCISE_UPDATE_URL = "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises"
 
   def self.perform(exercise_id, token)
+    LOGGER.debug "Starting validation of exercise #{exercise_id}"
+
     prepare_execution_environment
 
-    download_exercise(token, exercise_id, TEST_FILENAME)
-    download_exercise_hidden(token, exercise_id, HIDDEN_TEST_FILENAME)
+    download_exercise(token, exercise_id, ApplicationJob::TEST_FILENAME)
+    download_exercise_hidden(token, exercise_id, ApplicationJob::HIDDEN_TEST_FILENAME)
     download_exercise_stub(token, exercise_id, STUB_FILENAME)
 
-    payload = validate_exercise(execution_directory(TEST_FILENAME), execution_directory(HIDDEN_TEST_FILENAME), execution_directory(STUB_FILENAME))
+    payload = validate_exercise(
+        execution_directory(ApplicationJob::TEST_FILENAME),
+        execution_directory(ApplicationJob::HIDDEN_TEST_FILENAME),
+        execution_directory(STUB_FILENAME))
+    LOGGER.debug "finished validating sending payload"
     RestClient.patch "#{EXERCISE_UPDATE_URL}/#{exercise_id}", payload
+    LOGGER.debug "finished sending payload"
   end
 
   def self.validate_exercise(test_path, hidden_test_path, stub_path)
