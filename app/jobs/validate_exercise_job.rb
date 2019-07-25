@@ -23,9 +23,8 @@ class ValidateExerciseJob < ApplicationJob
         execution_directory(ApplicationJob::TEST_FILENAME),
         execution_directory(ApplicationJob::HIDDEN_TEST_FILENAME),
         execution_directory(STUB_FILENAME))
-    LOGGER.debug "finished validating sending payload"
     RestClient.patch "#{EXERCISE_UPDATE_URL}/#{exercise_id}", payload
-    LOGGER.debug "finished sending payload"
+    LOGGER.debug "finished validation of exercise #{exercise_id}"
   end
 
   def self.validate_exercise(test_path, hidden_test_path, stub_path)

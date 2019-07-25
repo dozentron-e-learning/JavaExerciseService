@@ -29,9 +29,8 @@ class ExecuteExerciseJob < ApplicationJob
       result['submission_id'] = submission_id
     end
 
-    LOGGER.debug "finished execution sending payload"
     RestClient.post RESULT_URL, payload
-    LOGGER.debug "finished sending payload"
+    LOGGER.debug "finished execution of exercise #{exercise_id} and submission #{submission_id}"
   end
 
   private

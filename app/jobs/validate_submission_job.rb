@@ -23,9 +23,8 @@ class ValidateSubmissionJob < ApplicationJob
         execution_directory(ApplicationJob::HIDDEN_TEST_FILENAME),
         execution_directory(ApplicationJob::SUBMISSION_FILENAME))
 
-    LOGGER.debug "finished validating sending payload"
     RestClient.patch "#{SUBMISSION_UPDATE_URL}/#{submission_id}", payload
-    LOGGER.debug "finished sending payload"
+    LOGGER.debug "finished validation of submission #{submission_id} with exercise #{exercise_id}"
   end
 
   def self.validate_submission(test_path, hidden_test_path, submission_path)
