@@ -10,10 +10,10 @@ RSpec.describe ValidateSubmissionJob, type: :job do
   let(:submission_id) { 2 }
   let(:token) { '' }
 
-  let(:exercise_test_download_url) { "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercise/#{exercise_id}/download" }
-  let(:exercise_hidden_test_download_url) { "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercise/#{exercise_id}/download_hidden" }
-  let(:submission_download_url) { "#{Rails.configuration.service_urls.submission_service}/submission/#{submission_id}/download" }
-  let(:submission_update_url) { "#{Rails.configuration.service_urls.submission_service}/submission/#{submission_id}" }
+  let(:exercise_test_download_url) { "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{exercise_id}/download" }
+  let(:exercise_hidden_test_download_url) { "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{exercise_id}/download_hidden" }
+  let(:submission_download_url) { "#{Rails.configuration.service_urls.submission_service}/submissions/#{submission_id}/download" }
+  let(:submission_update_url) { "#{Rails.configuration.service_urls.submission_service}/submissions/#{submission_id}" }
 
   let(:test_jar_path) { Rails.root.join('spec', 'resources', 'jars', 'test.jar') }
   let(:hidden_test_jar_path) { Rails.root.join('spec', 'resources', 'jars', 'hidden_test.jar') }
