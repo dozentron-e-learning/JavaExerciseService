@@ -7,3 +7,8 @@ test:
   exercise_service: http://localhost:3000
   submission_service: http://localhost:3001
   result_service: http://localhost:3002
+
+production:
+  exercise_service: https://exercise:3000
+  submission_service: https://submission:3000
+  result_service: https://result:3000

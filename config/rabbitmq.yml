@@ -16,4 +16,5 @@ test:
 
 production:
   <<: *default
+  host: rabbitmq
   virtual_host: production
