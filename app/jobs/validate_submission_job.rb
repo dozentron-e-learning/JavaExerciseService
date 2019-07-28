@@ -6,7 +6,7 @@ class ValidateSubmissionJob < ApplicationJob
   VALIDATION_SUCCEEDED = :success
   VALIDATION_FAILED = :failed
 
-  SUBMISSION_UPDATE_URL = "#{Rails.configuration.service_urls.submission_service}/submissions"
+  SUBMISSION_UPDATE_URL = "#{::SUBMISSION_SERVICE_URL}/submissions"
 
   def self.perform(exercise_id, submission_id, token)
     LOGGER.debug "Starting validation of submission #{submission_id} with exercise #{exercise_id}"

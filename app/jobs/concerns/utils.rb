@@ -1,6 +1,8 @@
 require 'zip'
 require 'open3'
 require 'csv'
+require 'down'
+require 'fileutils'
 
 module Utils
   def self.included(base)
@@ -11,22 +13,22 @@ module Utils
     EXECUTION_DIRECTORY = 'gradle_execution_environment'.freeze
 
     def download_exercise(token, id, file_name)
-      tempfile = Down.download("#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{id}/download")
+      tempfile = Down.download("#{::EXERCISE_SERVICE_URL}/api/v1/exercises/#{id}/download")
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
     def download_exercise_hidden(token, id, file_name)
-      tempfile = Down.download("#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{id}/download_hidden")
+      tempfile = Down.download("#{::EXERCISE_SERVICE_URL}/api/v1/exercises/#{id}/download_hidden")
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
     def download_exercise_stub(token, id, file_name)
-      tempfile = Down.download("#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{id}/download_stub")
+      tempfile = Down.download("#{::EXERCISE_SERVICE_URL}/api/v1/exercises/#{id}/download_stub")
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
     def download_submission(token, id, file_name)
-      tempfile = Down.download("#{Rails.configuration.service_urls.submission_service}/submissions/#{id}/download")
+      tempfile = Down.download("#{::SUBMISSION_SERVICE_URL}/submissions/#{id}/download")
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
@@ -35,14 +37,14 @@ module Utils
     end
 
     def execution_directory(*path_elements)
-      Rails.root.join EXECUTION_DIRECTORY, *path_elements
+      ::WORKER_ROOT_PATH.join EXECUTION_DIRECTORY, *path_elements
     end
 
     ##
     # Prepares an execution directory by copying the +EXECUTION_DIRECTORY_TEMPLATE+ directory to +execution_directory+
     def prepare_execution_environment
       FileUtils.rm_rf execution_directory
-      FileUtils.copy_entry Rails.root.join(EXECUTION_DIRECTORY_TEMPLATE), execution_directory
+      FileUtils.copy_entry ::WORKER_ROOT_PATH.join(EXECUTION_DIRECTORY_TEMPLATE), execution_directory
     end
 
     def can_be_opened_as_zip?(path)

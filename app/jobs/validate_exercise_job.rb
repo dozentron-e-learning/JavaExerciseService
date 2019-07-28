@@ -8,7 +8,7 @@ class ValidateExerciseJob < ApplicationJob
 
   STUB_FILENAME = 'stub.jar'.freeze
 
-  EXERCISE_UPDATE_URL = "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises"
+  EXERCISE_UPDATE_URL = "#{::EXERCISE_SERVICE_URL}/api/v1/exercises"
 
   def self.perform(exercise_id, token)
     LOGGER.debug "Starting validation of exercise #{exercise_id}"

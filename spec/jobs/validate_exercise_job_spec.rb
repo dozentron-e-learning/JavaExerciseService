@@ -9,10 +9,10 @@ RSpec.describe ValidateExerciseJob, type: :job do
   let(:exercise_id) { 1 }
   let(:token) { '' }
 
-  let(:exercise_test_download_url) { "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{exercise_id}/download" }
-  let(:exercise_hidden_test_download_url) { "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{exercise_id}/download_hidden" }
-  let(:exercise_stub_download_url) { "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{exercise_id}/download_stub" }
-  let(:exercise_update_url) { "#{Rails.configuration.service_urls.exercise_service}/api/v1/exercises/#{exercise_id}" }
+  let(:exercise_test_download_url) { "#{EXERCISE_SERVICE_URL}/api/v1/exercises/#{exercise_id}/download" }
+  let(:exercise_hidden_test_download_url) { "#{EXERCISE_SERVICE_URL}/api/v1/exercises/#{exercise_id}/download_hidden" }
+  let(:exercise_stub_download_url) { "#{EXERCISE_SERVICE_URL}/api/v1/exercises/#{exercise_id}/download_stub" }
+  let(:exercise_update_url) { "#{EXERCISE_SERVICE_URL}/api/v1/exercises/#{exercise_id}" }
 
   let(:test_jar_path) { Rails.root.join('spec', 'resources', 'jars', 'test.jar') }
   let(:hidden_test_jar_path) { Rails.root.join('spec', 'resources', 'jars', 'hidden_test.jar') }

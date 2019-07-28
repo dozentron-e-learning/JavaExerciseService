@@ -9,7 +9,7 @@ class ExecuteExerciseJob < ApplicationJob
 
   include Utils
 
-  RESULT_URL = "#{Rails.configuration.service_urls.result_service}/results".freeze
+  RESULT_URL = "#{::RESULT_SERVICE_URL}/results".freeze
 
   def self.perform(exercise_id, submission_id, token)
     LOGGER.debug "Starting execution of exercise #{exercise_id} and submission #{submission_id}"

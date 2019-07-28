@@ -1,0 +1,20 @@
+source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.6.3'
+
+gem 'rake'
+
+gem 'resque'
+gem 'rubyzip'
+
+# Communication with services from the worker
+gem 'down'
+gem 'nokogiri'
+gem 'rest-client'
+
+# Test and Submission Validation
+gem 'mimemagic'
+
+# internationalization
+gem 'i18n'
