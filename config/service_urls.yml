@@ -9,6 +9,6 @@ test:
   result_service: http://localhost:3002
 
 production:
-  exercise_service: https://exercise:3000
-  submission_service: https://submission:3000
-  result_service: https://result:3000
+  exercise_service: <%= ENV['EXERCISE_URL'] %>
+  submission_service: <%= ENV['SUBMISSION_URL'] %>
+  result_service: <%= ENV['RESULT_URL'] %>

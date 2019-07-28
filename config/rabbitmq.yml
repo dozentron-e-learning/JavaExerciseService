@@ -16,5 +16,5 @@ test:
 
 production:
   <<: *default
-  host: rabbitmq
+  host: <%= ENV['RABBITMQ_HOST'] %>
   virtual_host: production
