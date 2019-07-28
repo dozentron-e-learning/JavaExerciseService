@@ -1,0 +1,22 @@
+ARG ruby_version=2.6
+FROM ruby:${ruby_version}-alpine
+
+ENV RAILS_ENV production
+
+WORKDIR /application
+
+ADD GemfileWorker* /application/
+
+RUN apk add --no-cache build-base libxml2-dev libxslt-dev git && \
+  bundle install --gemfile=GemfileWorker --without development test --deployment && \
+  apk del --no-cache build-base libxml2-dev libxslt-dev git
+
+ADD app/jobs app/jobs
+ADD config/resque.yml config/service_urls.yml config/
+ADD config/initializers/resque_configuration.rb config/initializers/setup_service_urls.rb config/initializers/
+ADD config/locales config/locales
+ADD gradle_execution_environment_template ./gradle_execution_environment_template
+ADD lib ./lib
+ADD Rakefile ./
+
+CMD ["bundle", "exec", "--gemfile=GemfileWorker", "rake", "resque:work"]
