@@ -57,4 +57,4 @@ gem 'i18n'
 gem 'rails-i18n'
 
 # Messaging
-gem 'activebunny', thm_git: 'ss2019-masterarbeit-gildamesh/activebunny'
+gem 'activebunny', thm_git: 'dalt40/activebunny'
