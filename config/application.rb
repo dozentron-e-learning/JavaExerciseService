@@ -37,5 +37,6 @@ module JavaExerciseService
     config.active_job.queue_adapter = :resque
 
     config.i18n.fallbacks = [:en]
+    config.jwt = config_for 'jwt'
   end
 end
