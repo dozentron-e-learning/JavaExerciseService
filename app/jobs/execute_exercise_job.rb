@@ -9,7 +9,7 @@ class ExecuteExerciseJob < ApplicationJob
 
   include Utils
 
-  RESULT_URL = "#{::RESULT_SERVICE_URL}/results".freeze
+  RESULT_URL = "#{::RESULT_SERVICE_URL}/api/v1/results".freeze
 
   def self.perform(exercise_id, submission_id, token)
     LOGGER.debug "Starting execution of exercise #{exercise_id} and submission #{submission_id}"
@@ -29,7 +29,7 @@ class ExecuteExerciseJob < ApplicationJob
       result['submission_id'] = submission_id
     end
 
-    RestClient.post RESULT_URL, payload
+    RestClient.post RESULT_URL, payload, headers={Authorization: "Bearer #{token}"}
     LOGGER.debug "finished execution of exercise #{exercise_id} and submission #{submission_id}"
   end
 

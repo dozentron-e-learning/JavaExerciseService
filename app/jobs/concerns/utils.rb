@@ -13,22 +13,22 @@ module Utils
     EXECUTION_DIRECTORY = 'gradle_execution_environment'.freeze
 
     def download_exercise(token, id, file_name)
-      tempfile = Down.download("#{::EXERCISE_SERVICE_URL}/api/v1/exercises/#{id}/download")
+      tempfile = Down.download("#{::EXERCISE_SERVICE_URL}/api/v1/exercises/#{id}/download", headers: {'Authorization' => "Bearer #{token}"})
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
     def download_exercise_hidden(token, id, file_name)
-      tempfile = Down.download("#{::EXERCISE_SERVICE_URL}/api/v1/exercises/#{id}/download_hidden")
+      tempfile = Down.download("#{::EXERCISE_SERVICE_URL}/api/v1/exercises/#{id}/download_hidden", headers: {'Authorization' => "Bearer #{token}"})
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
     def download_exercise_stub(token, id, file_name)
-      tempfile = Down.download("#{::EXERCISE_SERVICE_URL}/api/v1/exercises/#{id}/download_stub")
+      tempfile = Down.download("#{::EXERCISE_SERVICE_URL}/api/v1/exercises/#{id}/download_stub", headers: {'Authorization' => "Bearer #{token}"})
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 
     def download_submission(token, id, file_name)
-      tempfile = Down.download("#{::SUBMISSION_SERVICE_URL}/submissions/#{id}/download")
+      tempfile = Down.download("#{::SUBMISSION_SERVICE_URL}/api/v1/submissions/#{id}/download", headers: {'Authorization' => "Bearer #{token}"})
       FileUtils.mv tempfile.path, execution_directory(file_name)
     end
 

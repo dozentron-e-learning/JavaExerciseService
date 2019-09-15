@@ -6,7 +6,7 @@ class ValidateSubmissionJob < ApplicationJob
   VALIDATION_SUCCEEDED = :success
   VALIDATION_FAILED = :failed
 
-  SUBMISSION_UPDATE_URL = "#{::SUBMISSION_SERVICE_URL}/submissions"
+  SUBMISSION_UPDATE_URL = "#{::SUBMISSION_SERVICE_URL}/api/v1/submissions"
 
   def self.perform(exercise_id, submission_id, token)
     LOGGER.debug "Starting validation of submission #{submission_id} with exercise #{exercise_id}"
@@ -23,7 +23,7 @@ class ValidateSubmissionJob < ApplicationJob
         execution_directory(ApplicationJob::HIDDEN_TEST_FILENAME),
         execution_directory(ApplicationJob::SUBMISSION_FILENAME))
 
-    RestClient.patch "#{SUBMISSION_UPDATE_URL}/#{submission_id}", payload
+    RestClient.patch "#{SUBMISSION_UPDATE_URL}/#{submission_id}", payload, headers={Authorization: "Bearer #{token}"}
     LOGGER.debug "finished validation of submission #{submission_id} with exercise #{exercise_id}"
   end
 

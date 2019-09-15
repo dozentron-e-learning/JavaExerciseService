@@ -23,7 +23,7 @@ class ValidateExerciseJob < ApplicationJob
         execution_directory(ApplicationJob::TEST_FILENAME),
         execution_directory(ApplicationJob::HIDDEN_TEST_FILENAME),
         execution_directory(STUB_FILENAME))
-    RestClient.patch "#{EXERCISE_UPDATE_URL}/#{exercise_id}", payload
+    RestClient.patch "#{EXERCISE_UPDATE_URL}/#{exercise_id}/validation", payload, headers={Authorization: "Bearer #{token}"}
     LOGGER.debug "finished validation of exercise #{exercise_id}"
   end
 

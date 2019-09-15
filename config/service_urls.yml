@@ -2,13 +2,16 @@ development:
   exercise_service: http://localhost:3000
   submission_service: http://localhost:3001
   result_service: http://localhost:3002
+  auth_service: http://localhost:3010
 
 test:
   exercise_service: http://localhost:3000
   submission_service: http://localhost:3001
   result_service: http://localhost:3002
+  auth_service: http://localhost:3010
 
 production:
   exercise_service: <%= ENV['EXERCISE_URL'] %>
   submission_service: <%= ENV['SUBMISSION_URL'] %>
   result_service: <%= ENV['RESULT_URL'] %>
+  auth_service: <%= ENV['AUTH_URL'] %>

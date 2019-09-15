@@ -38,5 +38,7 @@ module JavaExerciseService
 
     config.i18n.fallbacks = [:en]
     config.jwt = config_for 'jwt'
+    config.service_urls = config_for 'service_urls'
+    config.plugin_name = 'java12_junit_5'
   end
 end
